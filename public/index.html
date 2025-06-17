@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>p2pburger - P2P File Transfer</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="app-container">
+        <h1>🍔 p2pburger</h1>
+
+        <div id="main-content">
+
+            <div id="sender-view">
+                <p>Original p2pburger is down for maintenance</p>
+                <p>Share files directly with anyone in the world, peer-to-peer.</p>
+                <div id="file-dropzone">
+                    <input type="file" id="file-input">
+                    <div id="file-dropzone-icon">📤</div>
+                    <p><strong>Click to select a file</strong><br>or drag and drop it here</p>
+                </div>
+            </div>
+
+            <div id="share-link-view" style="display:none;">
+                <p>Your secure link is ready! Send it to the other person.</p>
+                <div id="share-link-container">
+                    <input type="text" id="share-link-input" readonly>
+                    <button id="copy-button">Copy</button>
+                </div>
+            </div>
+
+            <div id="receiver-view" style="display:none;">
+                <p>Receiving a file. Please wait while we establish a secure connection.</p>
+                </div>
+        </div>
+
+        <div id="status-container">
+            <p id="status"></p>
+            <div id="progress-bar-container" style="display:none;">
+                <div id="progress-bar"></div>
+            </div>
+            <div id="download-link"></div>
+        </div>
+
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>
