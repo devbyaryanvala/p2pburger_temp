@@ -163,7 +163,12 @@ document.addEventListener('DOMContentLoaded', () => {
             this.log('Establishing peer connection...');
             this.peerConnection = new RTCPeerConnection({ iceServers: this.iceServers });
             this.peerConnection.onicecandidate = e => {
-                if (e.candidate) this.sendMessage({ type: 'candidate', label: e.candidate.sdpMLineIndex, id: e.candidate.sdpMid, candidate: e.candidate.candidate });
+                if (e.candidate) {
+                    this.log(`ICE candidate found: ${e.candidate.candidate}`);
+                    this.sendMessage({ type: 'candidate', label: e.candidate.sdpMLineIndex, id: e.candidate.sdpMid, candidate: e.candidate.candidate });
+                } else {
+                    this.log('All ICE candidates have been sent.');
+                }
             };
             this.peerConnection.onconnectionstatechange = () => this.handleConnectionStateChange();
 
@@ -185,6 +190,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (state === 'failed') {
                 this.log('Connection failed. Please check your network or try again.');
                 this.resetConnection();
+            }
+            if (state === 'connecting' && !this.connectionTimer) {
+                this.connectionTimer = setTimeout(() => {
+                    if (this.peerConnection.connectionState !== 'connected') {
+                        this.log('Connection timed out. Please try again.');
+                        this.resetConnection();
+                    }
+                }, 15000); // 15 second timeout
+            } else if (state === 'connected' || state === 'failed' || state === 'closed') {
+                clearTimeout(this.connectionTimer);
+                this.connectionTimer = null;
             }
         },
         
